@@ -1,0 +1,110 @@
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Cashew cream / warm beige palette */
+    --background: 95% 0.025 75;
+    --foreground: 22% 0.04 50;
+
+    --card: 97% 0.018 80;
+    --card-foreground: 22% 0.04 50;
+
+    --popover: 97% 0.018 80;
+    --popover-foreground: 22% 0.04 50;
+
+    /* Dark brown primary */
+    --primary: 26% 0.072 45;
+    --primary-foreground: 96% 0.018 80;
+
+    /* Light beige secondary */
+    --secondary: 90% 0.032 80;
+    --secondary-foreground: 26% 0.072 45;
+
+    /* Muted tan */
+    --muted: 88% 0.025 75;
+    --muted-foreground: 50% 0.04 55;
+
+    /* Natural green accent */
+    --accent: 46% 0.12 142;
+    --accent-foreground: 97% 0.01 80;
+
+    --destructive: 52% 0.2 25;
+    --destructive-foreground: 97% 0.01 80;
+
+    --border: 85% 0.028 75;
+    --input: 88% 0.025 75;
+    --ring: 26% 0.072 45;
+
+    --radius: 0.5rem;
+
+    /* Chart colors */
+    --chart-1: 46% 0.12 142;
+    --chart-2: 26% 0.072 45;
+    --chart-3: 70% 0.08 80;
+    --chart-4: 60% 0.1 55;
+    --chart-5: 50% 0.08 145;
+
+    /* Sidebar */
+    --sidebar: 93% 0.028 75;
+    --sidebar-foreground: 22% 0.04 50;
+    --sidebar-primary: 26% 0.072 45;
+    --sidebar-primary-foreground: 96% 0.018 80;
+    --sidebar-accent: 88% 0.03 80;
+    --sidebar-accent-foreground: 26% 0.072 45;
+    --sidebar-border: 83% 0.03 75;
+    --sidebar-ring: 26% 0.072 45;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Playfair Display", serif;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: "Playfair Display", serif;
+  }
+  .font-body {
+    font-family: "Plus Jakarta Sans", sans-serif;
+  }
+  .price-display {
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+  }
+  .grain-overlay {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  }
+  .cashew-gradient {
+    background: linear-gradient(135deg, oklch(96% 0.03 80), oklch(92% 0.04 70));
+  }
+  .hero-overlay {
+    background: linear-gradient(
+      to right,
+      oklch(15% 0.04 45 / 0.85) 0%,
+      oklch(15% 0.04 45 / 0.5) 60%,
+      transparent 100%
+    );
+  }
+}
