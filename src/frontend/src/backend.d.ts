@@ -22,8 +22,13 @@ export enum UserRole {
     guest = "guest"
 }
 export interface backendInterface {
+    _initializeAccessControlWithSecret(userSecret: string): Promise<void>;
     addTodo(description: string): Promise<void>;
     assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
+    claimFirstAdmin(): Promise<boolean>;
+    isCallerAdminSafe(): Promise<boolean>;
+    saveOrder(orderJson: string): Promise<bigint>;
+    getOrders(): Promise<Array<string>>;
     deleteTodo(id: bigint): Promise<void>;
     editTodo(id: bigint, description: string): Promise<void>;
     getCallerUserProfile(): Promise<string | null>;

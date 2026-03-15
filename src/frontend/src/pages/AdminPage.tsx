@@ -63,6 +63,11 @@ export function AdminPage() {
               <ShieldAlert className="h-4 w-4" />
               <AlertDescription>
                 Access denied. Your account does not have admin privileges.
+                <br />
+                <span className="text-xs mt-1 block opacity-80">
+                  If you are the store owner and cannot log in, please contact
+                  support to reset admin access.
+                </span>
               </AlertDescription>
             </Alert>
           ) : null}
@@ -73,6 +78,7 @@ export function AdminPage() {
               size="lg"
               onClick={login}
               disabled={loginStatus === "logging-in"}
+              data-ocid="admin.login_button"
             >
               {loginStatus === "logging-in" ? (
                 <>

@@ -18,6 +18,25 @@ import { useCart } from "../context/CartContext";
 import { getProducts } from "../data/products";
 import { formatINR } from "../utils/formatters";
 
+const GRADE_INDUSTRIES: Record<string, string[]> = {
+  W180: [
+    "Premium retailers",
+    "Luxury gifting",
+    "Export packers",
+    "Supermarkets",
+  ],
+  W240: ["Export companies", "Supermarkets", "Premium snack brands"],
+  W320: [
+    "Wholesalers",
+    "Restaurants",
+    "Sweet manufacturers",
+    "Snack processors",
+  ],
+  JH: ["Bakeries", "Sweet manufacturers", "Cooking & garnishing"],
+  LWP: ["Sweet manufacturers", "Chocolate makers", "Confectionery units"],
+  SWP: ["Bakeries", "Ice cream factories", "Biscuit manufacturers"],
+};
+
 export function ProductDetailPage() {
   const params = useParams({ from: "/products/$id" });
   const navigate = useNavigate();
@@ -56,12 +75,14 @@ export function ProductDetailPage() {
   const whatsappText = `Hello, I want to order *${quantity} kg* of *${product.name}* (${product.origin}). Price: ${formatINR(subtotal)} + GST. Please confirm availability.`;
   const whatsappUrl = `https://wa.me/919188520881?text=${encodeURIComponent(whatsappText)}`;
 
+  const industries = GRADE_INDUSTRIES[product.grade] ?? [];
+
   return (
     <main className="max-w-5xl mx-auto px-4 sm:px-6 py-10">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
         <div className="rounded-2xl overflow-hidden shadow-commodity aspect-[4/3]">
           <img
-            src={product.image}
+            src={product.images?.[0] ?? product.image}
             alt={product.name}
             className="w-full h-full object-cover"
           />
@@ -93,9 +114,26 @@ export function ProductDetailPage() {
             <span className="text-muted-foreground ml-1">/kg (excl. GST)</span>
           </div>
 
-          <p className="text-muted-foreground mb-6 leading-relaxed">
+          <p className="text-muted-foreground mb-4 leading-relaxed">
             {product.description}
           </p>
+
+          {industries.length > 0 && (
+            <div className="bg-secondary/50 rounded-xl p-4 mb-5 border border-border">
+              <p className="text-sm font-semibold mb-2">Best for:</p>
+              <ul className="space-y-1">
+                {industries.map((ind) => (
+                  <li
+                    key={ind}
+                    className="text-sm text-foreground/80 flex items-center gap-2"
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-accent flex-shrink-0" />
+                    {ind}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           <div className="mb-4">
             <Label

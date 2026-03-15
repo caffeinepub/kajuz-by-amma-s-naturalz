@@ -5,7 +5,6 @@ import {
   createRootRoute,
   createRoute,
   createRouter,
-  redirect,
 } from "@tanstack/react-router";
 import { Footer } from "./components/Footer";
 import { Navbar } from "./components/Navbar";
@@ -14,8 +13,10 @@ import { CartProvider } from "./context/CartContext";
 import { AdminDashboardPage } from "./pages/AdminDashboardPage";
 import { AdminPage } from "./pages/AdminPage";
 import { CartPage } from "./pages/CartPage";
+import { CashewGradesPage } from "./pages/CashewGradesPage";
 import { CheckoutPage } from "./pages/CheckoutPage";
 import { HomePage } from "./pages/HomePage";
+import { IndustriesPage } from "./pages/IndustriesPage";
 import { OrderConfirmationPage } from "./pages/OrderConfirmationPage";
 import { ProductDetailPage } from "./pages/ProductDetailPage";
 import { ProductsPage } from "./pages/ProductsPage";
@@ -81,6 +82,18 @@ const adminDashboardRoute = createRoute({
   component: AdminDashboardPage,
 });
 
+const gradesRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/grades",
+  component: CashewGradesPage,
+});
+
+const industriesRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/industries",
+  component: IndustriesPage,
+});
+
 const routeTree = rootRoute.addChildren([
   indexRoute,
   productsRoute,
@@ -90,6 +103,8 @@ const routeTree = rootRoute.addChildren([
   orderConfirmationRoute,
   adminRoute,
   adminDashboardRoute,
+  gradesRoute,
+  industriesRoute,
 ]);
 
 const router = createRouter({ routeTree });

@@ -1,11 +1,13 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import {
+  Factory,
   Globe,
   MessageCircle,
   Package,
   ShieldCheck,
+  Star,
   TrendingUp,
   Truck,
 } from "lucide-react";
@@ -37,9 +39,36 @@ const WHY_KAJUZ = [
   },
 ];
 
+const GRADE_GUIDE = [
+  {
+    icon: Star,
+    title: "Premium Retail",
+    grade: "W180",
+    desc: "For luxury retail packs, gift sets, and premium presentation",
+    color: "bg-amber-50 border-amber-200",
+    badgeColor: "bg-amber-700 text-white",
+  },
+  {
+    icon: TrendingUp,
+    title: "Standard Trading",
+    grade: "W320",
+    desc: "The most traded grade globally. Ideal for wholesale and food service",
+    color: "bg-green-50 border-green-200",
+    badgeColor: "bg-green-700 text-white",
+  },
+  {
+    icon: Factory,
+    title: "Food Processing",
+    grade: "LWP / SWP",
+    desc: "Cost-effective grades for bakery, confectionery, and industrial use",
+    color: "bg-stone-50 border-stone-200",
+    badgeColor: "bg-stone-700 text-white",
+  },
+];
+
 export function HomePage() {
   const navigate = useNavigate();
-  const products = getProducts();
+  const products = getProducts().filter((p) => !p.hidden);
 
   const scrollToProducts = () => {
     document
@@ -128,6 +157,64 @@ export function HomePage() {
           — MOQ: 100 kg
         </p>
       </div>
+
+      {/* Grade Guide Section */}
+      <section className="py-14 bg-secondary/30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <div className="text-center mb-8">
+            <span className="text-xs font-semibold tracking-widest uppercase text-accent">
+              Buyer's Guide
+            </span>
+            <h2 className="font-display text-3xl md:text-4xl font-bold mt-2 mb-2">
+              How to Choose the Right Cashew Grade
+            </h2>
+            <p className="text-muted-foreground">
+              Match your business need to the right kernel grade in seconds.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            {GRADE_GUIDE.map(
+              ({ icon: Icon, title, grade, desc, color, badgeColor }, i) => (
+                <motion.div
+                  key={title}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1, duration: 0.5 }}
+                  className={`rounded-2xl border p-6 flex flex-col gap-3 ${color}`}
+                  data-ocid={`home.grade_guide.card.${i + 1}`}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="w-10 h-10 rounded-lg bg-white/60 flex items-center justify-center">
+                      <Icon className="h-5 w-5 text-foreground/70" />
+                    </div>
+                    <span
+                      className={`text-xs font-bold px-3 py-1 rounded-full ${badgeColor}`}
+                    >
+                      {grade}
+                    </span>
+                  </div>
+                  <div>
+                    <h3 className="font-display font-bold text-lg mb-1">
+                      {title}
+                    </h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      {desc}
+                    </p>
+                  </div>
+                  <Link
+                    to="/grades"
+                    className="text-sm font-semibold text-accent hover:underline mt-auto"
+                    data-ocid={`home.grade_guide.view_link.${i + 1}`}
+                  >
+                    View Grade →
+                  </Link>
+                </motion.div>
+              ),
+            )}
+          </div>
+        </div>
+      </section>
 
       {/* Products Section */}
       <section id="products-section" className="py-16">

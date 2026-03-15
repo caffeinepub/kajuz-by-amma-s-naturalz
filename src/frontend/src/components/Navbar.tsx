@@ -5,6 +5,14 @@ import { Menu, Package, ShoppingCart, X } from "lucide-react";
 import { useState } from "react";
 import { useCart } from "../context/CartContext";
 
+const NAV_LINKS = [
+  { label: "Home", to: "/" },
+  { label: "Cashew Grades", to: "/grades" },
+  { label: "Industries We Supply", to: "/industries" },
+  { label: "Products", to: "/products" },
+  { label: "Bulk Order", to: "/products" },
+] as const;
+
 export function Navbar() {
   const { totalItems } = useCart();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -26,14 +34,17 @@ export function Navbar() {
             />
           </Link>
 
-          <nav className="hidden md:flex items-center gap-6">
-            <Link
-              to="/products"
-              className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors"
-              data-ocid="nav.products_link"
-            >
-              Products
-            </Link>
+          <nav className="hidden lg:flex items-center gap-5">
+            {NAV_LINKS.map((link) => (
+              <Link
+                key={`${link.label}-${link.to}`}
+                to={link.to}
+                className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors whitespace-nowrap"
+                data-ocid={`nav.${link.label.toLowerCase().replace(/[^a-z0-9]/g, "-")}_link`}
+              >
+                {link.label}
+              </Link>
+            ))}
             <button
               type="button"
               onClick={() => scrollTo("about")}
@@ -55,7 +66,7 @@ export function Navbar() {
               <Button
                 variant="ghost"
                 size="sm"
-                className="hidden md:flex gap-1 text-xs"
+                className="hidden lg:flex gap-1 text-xs"
               >
                 <Package className="h-3.5 w-3.5" />
                 Admin
@@ -75,7 +86,7 @@ export function Navbar() {
             <Button
               variant="ghost"
               size="icon"
-              className="md:hidden"
+              className="lg:hidden"
               onClick={() => setMobileOpen(!mobileOpen)}
             >
               {mobileOpen ? (
@@ -88,15 +99,17 @@ export function Navbar() {
         </div>
 
         {mobileOpen && (
-          <div className="md:hidden py-4 border-t border-border space-y-1">
-            <Link
-              to="/products"
-              className="block px-2 py-2 text-sm font-medium"
-              onClick={() => setMobileOpen(false)}
-              data-ocid="nav.products_link"
-            >
-              Products
-            </Link>
+          <div className="lg:hidden py-4 border-t border-border space-y-1">
+            {NAV_LINKS.map((link) => (
+              <Link
+                key={`mobile-${link.label}-${link.to}`}
+                to={link.to}
+                className="block px-2 py-2 text-sm font-medium"
+                onClick={() => setMobileOpen(false)}
+              >
+                {link.label}
+              </Link>
+            ))}
             <button
               type="button"
               className="block w-full text-left px-2 py-2 text-sm"

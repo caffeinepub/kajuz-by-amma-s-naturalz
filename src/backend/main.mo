@@ -34,11 +34,43 @@ actor {
   var nextId = 0;
   let todoLists = Map.empty<Principal, TodoList>();
   let userProfiles = Map.empty<Principal, Text>();
+  let orders = Map.empty<Nat, Text>();
+  var nextOrderId = 0;
 
   // Access Control State
   let accessControlState = AccessControl.initState();
   include MixinAuthorization(accessControlState);
   include MixinStorage();
+
+  // First admin claim: first caller becomes admin, no token needed
+  public shared ({ caller }) func claimFirstAdmin() : async Bool {
+    if (caller.isAnonymous()) { return false };
+    if (accessControlState.adminAssigned) { return false };
+    accessControlState.userRoles.add(caller, #admin);
+    accessControlState.adminAssigned := true;
+    true
+  };
+
+  // Safe isCallerAdmin: returns false instead of trapping for unregistered users
+  public query ({ caller }) func isCallerAdminSafe() : async Bool {
+    if (caller.isAnonymous()) { return false };
+    switch (accessControlState.userRoles.get(caller)) {
+      case (?#admin) { true };
+      case (_) { false };
+    };
+  };
+
+  // Order Management
+  public shared ({ caller }) func saveOrder(orderJson : Text) : async Nat {
+    let id = nextOrderId;
+    orders.add(id, orderJson);
+    nextOrderId += 1;
+    id
+  };
+
+  public query ({ caller }) func getOrders() : async [Text] {
+    orders.toArray().map(func((_, v)) { v });
+  };
 
   // User Management
   public shared ({ caller }) func signUp(username : Text) : async () {

@@ -1,10 +1,9 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useState } from "react";
 import { ProductCard } from "../components/ProductCard";
 import { getProducts } from "../data/products";
 
 export function ProductsPage() {
-  const products = getProducts();
+  const products = getProducts().filter((p) => !p.hidden);
   const wholeProducts = products.filter((p) => p.category === "whole");
   const brokenProducts = products.filter((p) => p.category === "broken");
 

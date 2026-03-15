@@ -1,57 +1,42 @@
-# kajuz by Amma's Naturalz — B2B Cashew Kernel Bulk Order Platform
+# kajuz by Amma's Naturalz — Version 4
 
 ## Current State
-New project. No existing code.
+- Full B2B cashew kernel ecommerce platform with storefront, cart, checkout, UPI payment, WhatsApp ordering
+- Admin dashboard via Internet Identity authentication
+- Products: W180, W240, W320, JH (Tanzania/India), LWP (Tanzania/India), SWP
+- Navigation: Products, About, Contact, Admin, Cart
+- Homepage has hero, why-kajuz section, product listings, grade chart
+- Backend uses MixinAuthorization with `isCallerAdmin()` that traps for unregistered users causing Access Denied
+- Images stored via blob-storage, referenced in product data
 
 ## Requested Changes (Diff)
 
 ### Add
-- Full B2B bulk cashew kernel ordering platform
-- Homepage with hero, product cards, grade chart, trust section
-- Product listing page with category filters (Whole / Broken)
-- Individual product detail pages with live price calculator
-- Cart system with GST calculation (18% GST shown at checkout)
-- Multi-step checkout: customer details → delivery address → payment
-- UPI payment flow: QR code display on desktop, deep-link on mobile (upi://pay?pa=ammasnaturalz@okhdfcbank)
-- WhatsApp floating button + auto message to +919188520881
-- Order confirmation screen with order details
-- Admin dashboard: manage products (price, image, origin, stock status), view orders, customer info
-- Cashew grade comparison chart (W180/W240/W320 kernel size visual)
-- MOQ enforcement: minimum 100 kg, quantity in kg increments
-- Backend: products, orders, customers, admin auth stored in Motoko canister
-- Authorization system for admin role
-- Blob storage for product images
+- `claimFirstAdmin()` backend function: if no admin exists, make caller admin (no token required)
+- `isCallerAdminSafe()` backend function: returns false instead of trapping for unregistered users
+- New page: `/grades` — Cashew Grades Guide (whole kernels table, broken kernels table, size infographic)
+- New page: `/industries` — Industries We Supply (5 industry cards with grades + uses)
+- Homepage section: "How to Choose the Right Cashew Grade" (3 cards: Premium Retail→W180, Standard Trading→W320, Food Processing→LWP/SWP)
+- Product detail page: "Best for these industries" section per grade
+- Kernel size infographic (horizontal comparison bars: W180 > W240 > W320 > LWP > SWP)
 
 ### Modify
-- N/A (new project)
+- Navigation: Home, Cashew Grades (/grades), Industries We Supply (/industries), Products, Bulk Order (/products), About, Contact
+- AdminPage: use `claimFirstAdmin()` flow — if user logs in and is not admin, offer to claim first admin if no admin exists; also handle unregistered user gracefully
+- Admin dashboard: fix images showing — ensure products with images from blob-storage display correctly; edit button should open edit sheet properly
+- ProductDetailPage: add "Best for Industries" section below description
 
 ### Remove
-- N/A (new project)
+- Nothing removed
 
 ## Implementation Plan
-
-### Backend (Motoko)
-- Product entity: id, name, grade, category (whole/broken), origin (India/Tanzania/Both), pricePerKg, imageUrl, description, inStock, stockKg
-- Order entity: id, customerId, items[], customerDetails, deliveryAddress, subtotal, gstAmount, totalAmount, paymentStatus, upiTxnId, createdAt, status
-- Customer entity: id, name, phone, businessName, city
-- Admin functions: updateProduct, addProduct, getOrders, updateOrderStatus
-- Public functions: getProducts, getProductById, createOrder, updatePaymentStatus
-- Authorization: admin role with hardcoded admin principal or authorization component
-
-### Frontend Pages
-1. `/` — Homepage: hero, product grid, grade chart, trust badges, WhatsApp CTA
-2. `/products` — Product listing with whole/broken filter tabs
-3. `/products/:id` — Product detail with live calculator, add to cart
-4. `/cart` — Cart summary with GST breakdown
-5. `/checkout` — 3-step form: details → address → payment (UPI QR or deeplink)
-6. `/order-confirmation/:id` — Order success with WhatsApp notification link
-7. `/admin` — Admin login + dashboard (products, orders, customers)
-8. `/admin/products` — Product management with add/edit/price update
-9. `/admin/orders` — Orders list with status management
-
-### Key Logic
-- MOQ: disable add-to-cart if quantity < 100 kg
-- GST: 5% on food commodity (cashew kernels are agricultural produce taxed at 5% GST)
-- UPI: on mobile generate upi:// deep link; on desktop generate QR code image from UPI string
-- WhatsApp: on order submit generate pre-filled wa.me link with order details
-- Cart: persist in localStorage (React state)
+1. Generate new Motoko backend adding `claimFirstAdmin()` and making `isCallerAdmin()` safe (return false not trap)
+2. Generate supporting cashew infographic images
+3. Update App.tsx with new routes (/grades, /industries)
+4. Update Navbar.tsx with new navigation links
+5. Create CashewGradesPage.tsx with tables, infographic, real images
+6. Create IndustriesPage.tsx with industry cards
+7. Update HomePage.tsx adding "How to Choose" section
+8. Update ProductDetailPage.tsx adding "Best for Industries" section
+9. Update AdminPage.tsx to use claimFirstAdmin flow
+10. Validate and deploy

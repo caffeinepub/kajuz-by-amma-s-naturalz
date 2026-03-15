@@ -18,6 +18,11 @@ export function ProductCard({ product, index }: ProductCardProps) {
   const { addToCart } = useCart();
   const [adding, setAdding] = useState(false);
 
+  const imgSrc =
+    product.images && product.images.length > 0
+      ? product.images[0]
+      : product.image;
+
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -35,7 +40,7 @@ export function ProductCard({ product, index }: ProductCardProps) {
       <Link to="/products/$id" params={{ id: product.id }}>
         <div className="aspect-[4/3] overflow-hidden bg-muted">
           <img
-            src={product.image}
+            src={imgSrc}
             alt={product.name}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
             loading="lazy"
